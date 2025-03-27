@@ -1,0 +1,64 @@
+spring:
+  applicationname: simms_GOV
+  profiles:
+    active: itsm
+    group:
+      itsm:
+        - common
+server:
+  port: 8090
+
+---
+
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+
+logging:
+  level:
+    com.simms.iam: debug
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+    org.springframework.web.servlet: error
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.sql: trace
+    org.hibernate.type: trace
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.cache: debug
+
+
+spring:
+  config:
+    activate:
+      on-profile: common
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:
+    username:
+    password:
+
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+  jwt:
+    secret: akluiwdjlaiwdjlaiwdjaliwdhjaluifhkuyawGDJYDGalwdijawdliawdhjlakuwdgbhalowdaawdaqwdawdq11232wdiolj123123
+    token-validity-one-min: 60000
+
+path:
+  host: http://localhost:3000
+  serial: classpath:skey
+
+
+files:
+  prefix : d:/upload
+  imagePath: /images
+  filePath: /others
+  viewPath: file:///D://upload//
+
+---
