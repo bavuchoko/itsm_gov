@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import simms.gov.itsm.domain.authorization.dto.AuthAdapter;
+import simms.gov.itsm.domain.authorization.repository.AuthorizationRepository;
+import simms.gov.itsm.domain.authorization.service.AuthorizationService;
 import simms.gov.itsm.domain.user.respository.AccountJpaRepository;
 
 import java.security.Key;
@@ -36,8 +38,7 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
     private final String secret;
     private final long accessTokenValidityTime;
 
-    private final TokenIpCollection LOGIN_MAP;
-    private final AccountJpaRepository accountJpaRepository;
+    private final AuthorizationRepository authorizationRepository;
 
     @Value("${spring.jwt.token-validity-one-min}")
     private long globalTimeOneMin;
@@ -52,12 +53,11 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token-validity-one-min}") long tokenValidityOneMin,
             TokenIpCollection Loginmap,
-            AccountJpaRepository accountJpaRepository) {
+            AuthorizationRepository authorizationRepository) {
         this.secret = secret;
         // 30분
         this.accessTokenValidityTime = tokenValidityOneMin * 100 ;
-        this.LOGIN_MAP = Loginmap;
-        this.accountJpaRepository = accountJpaRepository;
+        this.authorizationRepository = authorizationRepository;
     }
 
     @Override
@@ -72,15 +72,9 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-//        Long id = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getId();
-//        String userName = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getUsername();
-//        String name = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getName();
-//        String portrait = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getProfileImage();
-//        String signature = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getSignatureImage();
-////        Department department = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getDepartment();
-////        Company company = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getCompany();
-//        String email = ((UserAccountAdapter)(authentication.getPrincipal())).getAccount().getEmail();
-
+        Long id = ((AuthAdapter)(authentication.getPrincipal())).getAccount().getId();
+        String userName = ((AuthAdapter)(authentication.getPrincipal())).getAccount().getAccountInfo().getUserName();
+        String name = ((AuthAdapter)(authentication.getPrincipal())).getAccount().getAccountInfo().getName();
 
         long remainingMilliseconds = getRemainingMilliseconds();
 
@@ -89,19 +83,10 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
         Date validity =  tokenType == TokenType.ACCESS_TOKEN ?  new Date(now + this.accessTokenValidityTime) : new Date(now + remainingMilliseconds);
 
         Map<String, Object> payloads = new HashMap<>();
-        //Todo id 정보는 jwt 에서 제외시킴. username과 id 중 어느것을 보내는 것이 보안상 유리할지 검토해야 됨.
-        // 현재 토큰정보로 부터 인증객체를 가져오는 로직인 this.getAuthentication 에서 username 을 사용중이므로 우선 id를 제거함.
-        // id 다시 원복... (로그인한 사용자의 결제가능여부를 확인하기 위해)
-//        payloads.put("id", id);
-//        payloads.put("username", userName);
-//        payloads.put("email", email !=null? email: "");
-//        payloads.put("name", name);
-////        payloads.put("department", department!=null ? department.getName() :"" );
-////        payloads.put("company",  company!=null ? company.getName() :"" );
-//        payloads.put("portrait",   portrait !=null? portrait: "" );
-//        payloads.put("signature",  signature !=null? signature: "" );
         payloads.put(AUTHORITIES_KEY, authorities);
-
+        payloads.put("id", id);
+        payloads.put("username", userName);
+        payloads.put("name", name);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
@@ -137,7 +122,7 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
         String username = claims.get("username", String.class);
 
 
-        UserDetails userDetails=  new AuthAdapter(accountJpaRepository.findByAccountInfo_UserName(username)
+        UserDetails userDetails=  new AuthAdapter(authorizationRepository.findByUsernameWithRolesAndDepartmentAndCompany(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username)));
 
         return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
@@ -147,8 +132,6 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
 
     @Override
     public void logout(String refreshToken) {
-        LOGIN_MAP.remove(refreshToken);
-        logger.info("after logout userToken remain = {} ", LOGIN_MAP.size());
     }
 
 
