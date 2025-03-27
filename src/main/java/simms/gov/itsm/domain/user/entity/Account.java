@@ -3,18 +3,19 @@ package simms.gov.itsm.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import simms.gov.itsm.domain.task.sub.Contentable;
 import simms.gov.itsm.domain.user.vo.AccountInfo;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name="Account")
+@Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id", callSuper = false)
-public class AccountJapEntity {
+public class Account implements Contentable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

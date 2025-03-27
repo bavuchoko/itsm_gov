@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import simms.gov.itsm.domain.user.dto.AccountRequestDto;
-import simms.gov.itsm.domain.user.entity.AccountJapEntity;
+import simms.gov.itsm.domain.user.entity.Account;
 import simms.gov.itsm.domain.user.respository.AccountJpaRepository;
 import simms.gov.itsm.domain.user.service.impl.AccountServiceImpl;
 
@@ -41,7 +41,7 @@ class AccountServiceImplTest {
 
         /* then */
         verify(passwordEncoder).encode("password");
-        verify(accountJpaRepository).save(any(AccountJapEntity.class));
+        verify(accountJpaRepository).save(any(Account.class));
     }
 
 }

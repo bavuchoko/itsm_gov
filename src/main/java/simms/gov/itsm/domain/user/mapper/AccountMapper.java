@@ -6,7 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import simms.gov.itsm.domain.user.dto.AccountRequestDto;
 import simms.gov.itsm.domain.user.dto.AccountResponseDto;
-import simms.gov.itsm.domain.user.entity.AccountJapEntity;
+import simms.gov.itsm.domain.user.entity.Account;
 
 @Mapper(
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -18,12 +18,12 @@ public interface AccountMapper {
     @Mapping(target = "email", source = "accountInfo.email")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "roles", source = "roles")
-    AccountResponseDto entityToResponse(AccountJapEntity account);
+    AccountResponseDto entityToResponse(Account account);
 
     @Mapping(target = "accountInfo", expression = "java(new simms.gov.itsm.domain.user.vo.AccountInfo(account.getName(), account.getUserName(), account.getEmail()))")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "roles", source = "roles")
-    AccountJapEntity requestToEntity(AccountRequestDto account);
+    Account requestToEntity(AccountRequestDto account);
 
 
 }

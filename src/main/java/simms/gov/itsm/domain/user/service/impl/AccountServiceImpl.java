@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import simms.gov.itsm.domain.user.dto.AccountRequestDto;
 import simms.gov.itsm.domain.user.dto.AccountResponseDto;
-import simms.gov.itsm.domain.user.entity.AccountJapEntity;
+import simms.gov.itsm.domain.user.entity.Account;
 import simms.gov.itsm.domain.user.mapper.AccountMapper;
 import simms.gov.itsm.domain.user.respository.AccountJpaRepository;
 import simms.gov.itsm.domain.user.service.AccountService;
@@ -23,7 +23,7 @@ public class AccountServiceImpl implements AccountService {
 
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
-        AccountJapEntity entity = accountJpaRepository.save(
+        Account entity = accountJpaRepository.save(
                 AccountMapper.INSTANCE.requestToEntity(requestDto)
         );
 

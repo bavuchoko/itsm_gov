@@ -18,7 +18,7 @@ import simms.gov.itsm.config.token.TokenType;
 import simms.gov.itsm.domain.authorization.dto.AuthAdapter;
 import simms.gov.itsm.domain.authorization.dto.AuthRequestDto;
 import simms.gov.itsm.domain.authorization.repository.AuthorizationRepository;
-import simms.gov.itsm.domain.user.entity.AccountJapEntity;
+import simms.gov.itsm.domain.user.entity.Account;
 import simms.gov.itsm.utils.CookieUtil;
 
 @Slf4j
@@ -51,7 +51,7 @@ public class AuthorizationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        AccountJapEntity userAccount = authorizationRepository.findByUsernameWithRolesAndDepartmentAndCompany(username)
+        Account userAccount = authorizationRepository.findByUsernameWithRolesAndDepartmentAndCompany(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return new AuthAdapter(userAccount);
     }

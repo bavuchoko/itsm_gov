@@ -1,15 +1,18 @@
 package simms.gov.itsm.domain.task;
 
 
+import jakarta.persistence.Entity;
 import lombok.*;
-import simms.gov.itsm.domain.sub.Accept;
+import simms.gov.itsm.domain.task.sub.Accept;
 
 import java.util.Arrays;
 
-@Builder
+@Entity
 @Getter
-@Setter
+@Builder
 public class Request extends TaskManager implements Task {
+
+
 
     public Request(){
         super(Arrays.asList(new Accept()));
