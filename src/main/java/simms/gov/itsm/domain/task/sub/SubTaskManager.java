@@ -22,8 +22,8 @@ public class SubTaskManager {
     private Long id;
     protected boolean done;
     protected String content;
-    protected LocalDateTime operateTime;
-
+    protected LocalDateTime createDate;
+    protected LocalDateTime executeDate;
     @Id
     @ManyToOne
     @JoinColumn(name = "task")

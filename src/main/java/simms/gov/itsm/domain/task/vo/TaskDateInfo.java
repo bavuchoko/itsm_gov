@@ -1,20 +1,18 @@
 package simms.gov.itsm.domain.task.vo;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Builder
 @Getter
 @EqualsAndHashCode
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TaskDateInfo {
-    private final LocalDate createDate;
-    private final LocalDate updateDate;
-    private final LocalDate operateDate;
-    private final LocalDate reviewDate;
-    private final LocalDate executeDate;
-    private final LocalDate requestStartDate;
-    private final LocalDate requestEndDate;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
+
 }

@@ -1,23 +1,25 @@
 package simms.gov.itsm.domain.task.vo;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 import simms.gov.itsm.domain.user.entity.Account;
 
 @Getter
-@Builder
 @EqualsAndHashCode
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TaskUserInfo {
 
     @ManyToOne
-    private final Account createUser;
+    private Account createUser;
     @ManyToOne
-    private final Account updateUser;
+    private Account updateUser;
     @ManyToOne
-    private final Account operateUser;
+    private Account operateUser;
     @ManyToOne
-    private final Account reviewUser;
+    private Account reviewUser;
 
 }
