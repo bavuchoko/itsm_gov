@@ -1,7 +1,7 @@
 package simms.gov.itsm.domain.task.sub;
 
-public interface SubTask<T extends Contentable> {
+public interface SubTask {
 
-    void doJob(T t);
+    void done(Contentable t);
     boolean isComplete();
 }
