@@ -7,7 +7,7 @@ import simms.gov.itsm.domain.user.entity.Account;
 
 
 @Entity
-public class Accept extends SubTaskManager implements SubTask<Account>{
+public class Accept extends SubTaskManager implements SubTask{
 
 
     @ManyToOne
@@ -17,8 +17,13 @@ public class Accept extends SubTaskManager implements SubTask<Account>{
 
 
     @Override
-    public void doJob(Account item) {
-        approvalUser = item;
+    public void done(Contentable item) {
+        if (item instanceof Account user) {
+            this.approvalUser = user;
+            this.done = true;
+        } else {
+            throw new IllegalArgumentException("Invalid content type for Review task");
+        }
     }
 
     @Override
