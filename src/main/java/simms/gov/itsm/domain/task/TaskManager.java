@@ -2,6 +2,7 @@ package simms.gov.itsm.domain.task;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import simms.gov.itsm.domain.task.sub.SubTaskManager;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@Getter
 public class TaskManager {
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -43,8 +45,5 @@ public class TaskManager {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<SubTaskManager> procedures;
 
-    public TaskManager(List<SubTaskManager> procedure){
-        this.procedures = procedure;
-    }
 
 }
