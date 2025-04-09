@@ -1,13 +1,14 @@
 package simms.gov.itsm.domain.task.sub;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import simms.gov.itsm.domain.task.TaskManager;
 import simms.gov.itsm.domain.user.entity.Account;
 
 
+@Getter
 @Entity
 public class Accept extends SubTaskManager implements SubTask{
 
