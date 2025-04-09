@@ -3,30 +3,27 @@ package simms.gov.itsm.domain.task.sub;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import simms.gov.itsm.domain.task.TaskManager;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn
+@DiscriminatorColumn(name = "sub_type")
+@Table(
+        name = "sub_task_manager",
+        indexes = @Index(name = "idx_subtask_task", columnList = "task_id")
+)
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(SubTaskId.class)
 public class SubTaskManager {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    protected boolean done;
-    protected String content;
-    protected LocalDateTime createDate;
-    protected LocalDateTime executeDate;
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "task")
-    private TaskManager task;
 
+    @ManyToOne
+    protected TaskManager task;
+    protected boolean done;
 }
